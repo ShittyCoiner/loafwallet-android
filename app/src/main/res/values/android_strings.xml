@@ -2,7 +2,7 @@
 <resources>
     <string name="lang">en</string>
     <!-- Device authentication title -->
-    <string name="App.name.Android">LoafWallet</string>
+    <string name="App.name.Android">Shittycoin Wallet</string>
     <!-- Device authentication title -->
     <string name="Auth.title.Android">Authentication required</string>
     <!-- Instruction to touch the sensor for fingerprint authentication -->
@@ -40,6 +40,6 @@
     <!-- Fingerprint was not recognized by the scanner, please try scanning again -->
     <string name="Fingerprint.not.recognized.Android">Fingerprint not recognized. Try again</string>
     <!-- Instruction how to enable device encryption -->
-    <string name="Warning.encryption.body.Android">A device screen lock is needed to safeguard your wallet. Go to \"Settings\" > \"Security\" > \"Screen lock\"</string>
+    <string name="Warning.encryption.body.Android_">A device screen lock is needed to safeguard your wallet. Go to \"Settings\" > \"Security\" > \"Screen lock\"</string>
 
 </resources>

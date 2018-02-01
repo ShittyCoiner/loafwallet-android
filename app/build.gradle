@@ -7,21 +7,28 @@ model {
 
         defaultConfig {
             testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
-            applicationId = 'com.loafwallet'
+            applicationId = 'org.shittycoin.wallet'
             minSdkVersion.apiLevel = 23
             targetSdkVersion.apiLevel = 25
             versionCode = 49
             versionName = "49"
+            resValues.with {
+                create() {
+                    type = "string"
+                    name = "app_name"
+                    value = "Shittycoin Wallet"
+                }
+            }
         }
 
-        productFlavors.with {
+    /*    productFlavors.with {
             create("loaf") {
                 applicationId "com.loafwallet"
                 resValues.with {
                     create() {
                         type = "string"
                         name = "app_name"
-                        value = "LoafWallet"
+                        value = "Shittycoin Wallet"
                     }
                 }
             }
@@ -37,6 +44,7 @@ model {
             }
 
         }
+        */
 
         ndk {
             platformVersion = "23"
@@ -102,11 +110,11 @@ model {
                     create() {
                         type = "boolean"
                         name = "BITCOIN_TESTNET"
-                        value = "true"
+                        value = "false"
                     }
                 }
                 ndk {
-                    CFlags.addAll(['-DBITCOIN_TESTNET=1'])
+                    CFlags.addAll(['-DBITCOIN_TESTNET=0'])
                     minifyEnabled = false
                     debuggable = true
                 }
@@ -117,7 +125,7 @@ model {
 }
 
 def gitUpdateModules() {
-    ['sh', '-c', 'git submodule foreach git pull origin master'].execute().text.trim()
+    //['sh', '-c', 'git submodule foreach git pull origin master'].execute().text.trim()
     getLogger().debug("gitUpdateModules done!")
 }
 
@@ -132,6 +140,7 @@ dependencies {
     compile 'org.eclipse.jetty:jetty-continuation:9.2.19.v20160908'
     compile 'org.slf4j:slf4j-api:1.7.22'
     //    compile 'org.apache.commons:commons-compress:1.8.1'
+
     //    compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -150,5 +159,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    compile files('libs/android-integration-3.3.0.jar')
 }
 apply plugin: 'com.google.gms.google-services'

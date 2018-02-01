@@ -2,7 +2,6 @@ package com.breadwallet.presenter.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,11 +41,11 @@ import com.breadwallet.tools.animation.SlideDetector;
 import com.breadwallet.tools.animation.SpringAnimator;
 import com.breadwallet.tools.manager.BRClipboardManager;
 import com.breadwallet.tools.manager.BRSharedPrefs;
-import com.breadwallet.tools.security.BitcoinUrlHandler;
 import com.breadwallet.tools.security.BRSender;
+import com.breadwallet.tools.security.BitcoinUrlHandler;
 import com.breadwallet.tools.util.BRConstants;
-import com.breadwallet.tools.util.BRExchange;
 import com.breadwallet.tools.util.BRCurrency;
+import com.breadwallet.tools.util.BRExchange;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.BRWalletManager;
 
@@ -142,7 +141,7 @@ public class FragmentSend extends Fragment {
         regular = (BRButton) rootView.findViewById(R.id.left_button);
         economy = (BRButton) rootView.findViewById(R.id.right_button);
         close = (ImageButton) rootView.findViewById(R.id.close_button);
-        selectedIso = BRSharedPrefs.getPreferredBTC(getContext()) ? "LTC" : BRSharedPrefs.getIso(getContext());
+        selectedIso = BRSharedPrefs.getPreferredBTC(getContext()) ? "SYC" : BRSharedPrefs.getIso(getContext());
 
         amountBuilder = new StringBuilder(0);
         setListeners();
@@ -342,7 +341,7 @@ public class FragmentSend extends Fragment {
             @Override
             public void onClick(View v) {
                 if (selectedIso.equalsIgnoreCase(BRSharedPrefs.getIso(getContext()))) {
-                    selectedIso = "LTC";
+                    selectedIso = "SYC";
                 } else {
                     selectedIso = BRSharedPrefs.getIso(getContext());
                 }
@@ -585,7 +584,7 @@ public class FragmentSend extends Fragment {
         String iso = selectedIso;
         curBalance = BRWalletManager.getInstance().getBalance(getActivity());
         isoText.setText(BRCurrency.getSymbolByIso(getActivity(), selectedIso));
-        isoButton.setText(String.format("%s(%s)", BRCurrency.getCurrencyName(getActivity(), selectedIso), BRCurrency.getSymbolByIso(getActivity(), selectedIso)));
+        isoButton.setText(String.format("%s", BRCurrency.getCurrencyName(getActivity(), selectedIso)));
         //Balance depending on ISO
         BigDecimal balanceForISO = BRExchange.getAmountFromSatoshis(getActivity(), iso, new BigDecimal(curBalance));
         //formattedBalance

@@ -168,7 +168,7 @@ public class BRKeyStore {
                         KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                         .setBlockModes(BLOCK_MODE)
                         .setKeySize(256)
-                        .setUserAuthenticationRequired(auth_required)
+                        .setUserAuthenticationRequired(false)
                         .setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
                         .setRandomizedEncryptionRequired(false)
                         .setEncryptionPaddings(PADDING)

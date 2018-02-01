@@ -3,19 +3,16 @@ package com.breadwallet.presenter.activities.camera;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.breadwallet.R;
-import com.breadwallet.presenter.activities.util.ActivityUTILS;
 import com.breadwallet.presenter.activities.util.BRActivity;
-import com.breadwallet.tools.animation.SpringAnimator;
-import com.breadwallet.tools.qrcode.QRReader;
 import com.breadwallet.tools.security.BitcoinUrlHandler;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.platform.tools.BRBitId;
 
 
@@ -45,13 +42,13 @@ import com.platform.tools.BRBitId;
  */
 public class ScanQRActivity extends BRActivity {
     private SurfaceView mySurfaceView;
-    private QRReader qrEader;
+
     private static final String TAG = ScanQRActivity.class.getName();
     //    private boolean dataProcessing = false;
     private ImageView cameraGuide;
     private TextView descriptionText;
     private long lastUpdated;
-    private UIUpdateTask task;
+
     private boolean handlingCode;
     public static boolean appVisible = false;
     private static ScanQRActivity app;
@@ -63,78 +60,30 @@ public class ScanQRActivity extends BRActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr);
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.initiateScan();
 
 
-        mySurfaceView = (SurfaceView) findViewById(R.id.camera_view);
-        cameraGuide = (ImageView) findViewById(R.id.scan_guide);
-        descriptionText = (TextView) findViewById(R.id.description_text);
 
-        task = new UIUpdateTask();
-        task.start();
 
-        cameraGuide.setImageResource(R.drawable.cameraguide);
-        cameraGuide.setVisibility(View.GONE);
-
-        qrEader = new QRReader.Builder(this, mySurfaceView, new QRReader.OnQrFoundListener() {
-            @Override
-            public void onDetected(final String data) {
-                if (handlingCode) return;
-                if (BitcoinUrlHandler.isBitcoinUrl(data) || BRBitId.isBitId(data)) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lastUpdated = System.currentTimeMillis();
-                            cameraGuide.setImageResource(R.drawable.cameraguide);
-                            descriptionText.setText("");
-                            handlingCode = true;
-                            handleDetected(data);
-
-                        }
-                    });
-                }  else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lastUpdated = System.currentTimeMillis();
-                            cameraGuide.setImageResource(R.drawable.cameraguide_red);
-                            descriptionText.setText(getString(R.string.Send_invalidAddressTitle));
-                        }
-                    });
-                }
-
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        Log.d("resultxxx", "_"+scanResult);
+        if (scanResult != null && scanResult.getContents() != null) {
+            String data = scanResult.getContents();
+            if (BitcoinUrlHandler.isBitcoinUrl(data) || BRBitId.isBitId(data)) {
+                handleDetected(data);
             }
-        }).facing(QRReader.BACK_CAM)
-                .enableAutofocus(true)
-                .height(mySurfaceView.getHeight())
-                .width(mySurfaceView.getWidth())
-                .build();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                cameraGuide.setVisibility(View.VISIBLE);
-                SpringAnimator.showExpandCameraGuide(cameraGuide);
-            }
-        }, 400);
+        }else{
+          //  handleDetected(" ");
+        }
+        finish();
+        // else continue with any other code you need in the method
 
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        appVisible = true;
-        qrEader.initAndStart(mySurfaceView);
-        app = this;
-        ActivityUTILS.init(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        appVisible = false;
-        qrEader.release();
-    }
 
     @Override
     public void onBackPressed() {
@@ -146,35 +95,8 @@ public class ScanQRActivity extends BRActivity {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("result", data);
         setResult(Activity.RESULT_OK, returnIntent);
-        finish();
+
     }
 
-    private class UIUpdateTask extends Thread {
-        public boolean running = true;
 
-        @Override
-        public void run() {
-            super.run();
-            while (running) {
-                if (System.currentTimeMillis() - lastUpdated > 300) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            cameraGuide.setImageResource(R.drawable.cameraguide);
-                            descriptionText.setText("");
-                        }
-                    });
-                }
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    }
 }

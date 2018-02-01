@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import com.breadwallet.BuildConfig;
 import com.breadwallet.R;
 import com.breadwallet.presenter.activities.SetPinActivity;
-import com.breadwallet.presenter.activities.settings.WebViewActivity;
 import com.breadwallet.presenter.activities.util.ActivityUTILS;
 import com.breadwallet.presenter.activities.util.BRActivity;
 import com.breadwallet.tools.animation.BRAnimator;
@@ -25,7 +24,6 @@ import com.breadwallet.tools.util.BRConstants;
 import com.breadwallet.wallet.BRWalletManager;
 import com.google.firebase.crash.FirebaseCrash;
 import com.platform.APIClient;
-import com.platform.HTTPServer;
 
 import java.io.Serializable;
 
@@ -122,6 +120,7 @@ public class IntroActivity extends BRActivity implements Serializable {
         }
 
         PostAuth.getInstance().onCanaryCheck(this, false);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

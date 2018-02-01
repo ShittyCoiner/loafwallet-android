@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.breadwallet.BreadApp;
 import com.breadwallet.R;
 import com.breadwallet.presenter.activities.BreadActivity;
-import com.breadwallet.presenter.customviews.BRDialogView;
 import com.breadwallet.presenter.customviews.BRToast;
 import com.breadwallet.presenter.entities.BRMerkleBlockEntity;
 import com.breadwallet.presenter.entities.BRPeerEntity;
@@ -35,9 +34,9 @@ import com.breadwallet.presenter.entities.ImportPrivKeyEntity;
 import com.breadwallet.presenter.entities.TxItem;
 import com.breadwallet.presenter.interfaces.BROnSignalCompletion;
 import com.breadwallet.tools.animation.BRAnimator;
-import com.breadwallet.tools.animation.BRDialog;
 import com.breadwallet.tools.animation.SpringAnimator;
 import com.breadwallet.tools.manager.BREventManager;
+import com.breadwallet.tools.manager.BRNotificationManager;
 import com.breadwallet.tools.manager.BRSharedPrefs;
 import com.breadwallet.tools.qrcode.QRUtils;
 import com.breadwallet.tools.security.BRKeyStore;
@@ -46,12 +45,11 @@ import com.breadwallet.tools.sqlite.PeerDataSource;
 import com.breadwallet.tools.sqlite.TransactionDataSource;
 import com.breadwallet.tools.threads.ImportPrivKeyTask;
 import com.breadwallet.tools.util.BRConstants;
-import com.breadwallet.tools.manager.BRNotificationManager;
 import com.breadwallet.tools.util.BRCurrency;
 import com.breadwallet.tools.util.BRExchange;
+import com.breadwallet.tools.util.Bip39Reader;
 import com.breadwallet.tools.util.TypesConverter;
 import com.breadwallet.tools.util.Utils;
-import com.breadwallet.tools.util.Bip39Reader;
 import com.google.firebase.crash.FirebaseCrash;
 import com.loafwallet.BadEnglishWordListFix;
 import com.platform.entities.WalletInfo;
@@ -402,7 +400,7 @@ public class BRWalletManager {
                 app.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String am = BRCurrency.getFormattedCurrencyString(context, "LTC", BRExchange.getBitcoinForSatoshis(context, new BigDecimal(amount)));
+                        String am = BRCurrency.getFormattedCurrencyString(context, "SYC", BRExchange.getBitcoinForSatoshis(context, new BigDecimal(amount)));
                         String amCur = BRCurrency.getFormattedCurrencyString(context, BRSharedPrefs.getIso(context), BRExchange.getAmountFromSatoshis(context, BRSharedPrefs.getIso(context), new BigDecimal(amount)));
                         String formatted = String.format("%s (%s)", am, amCur);
                         String strToShow = String.format(context.getString(R.string.TransactionDetails_received), formatted);
@@ -492,7 +490,7 @@ public class BRWalletManager {
 
     public void startTheWalletIfExists(final Activity app) {
         final BRWalletManager m = BRWalletManager.getInstance();
-        if (!m.isPasscodeEnabled(app)) {
+    /*    if (!m.isPasscodeEnabled(app)) {
             //Device passcode/password should be enabled for the app to work
             BRDialog.showCustomDialog(app, app.getString(R.string.JailbreakWarnings_title), app.getString(R.string.Warning_encryption_body_Android),
                     app.getString(R.string.AccessibilityLabels_close), null, new BRDialogView.BROnClickListener() {
@@ -511,6 +509,9 @@ public class BRWalletManager {
                 BRAnimator.startBreadActivity(app, true);
             }
 
+        } */
+        if (!m.noWallet(app)) {
+            BRAnimator.startBreadActivity(app, true);
         }
     }
 

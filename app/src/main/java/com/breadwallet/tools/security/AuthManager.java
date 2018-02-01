@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,15 +11,12 @@ import android.view.View;
 
 import com.breadwallet.R;
 import com.breadwallet.presenter.activities.util.ActivityUTILS;
-import com.breadwallet.presenter.customviews.BRDialogView;
 import com.breadwallet.presenter.fragments.FragmentFingerprint;
 import com.breadwallet.presenter.fragments.FragmentPin;
 import com.breadwallet.presenter.interfaces.BRAuthCompletion;
-import com.breadwallet.tools.animation.BRDialog;
 import com.breadwallet.tools.manager.BRSharedPrefs;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.BRWalletManager;
-import com.jniwrappers.BRKey;
 
 import java.util.concurrent.TimeUnit;
 
@@ -231,7 +227,7 @@ public class AuthManager {
             return;
         }
 
-        if (keyguardManager.isKeyguardSecure()) {
+      //  if (keyguardManager.isKeyguardSecure()) {
             if (useFingerPrint) {
 
                 fingerprintFragment = new FragmentFingerprint();
@@ -261,7 +257,7 @@ public class AuthManager {
                     transaction.commit();
                 }
             }
-        } else {
+      /*  } else {
             BRDialog.showCustomDialog(app,
                     "",
                     "A device screen lock is needed to safeguard your wallet. Go to \"Settings\" > \"Security\" > \"Screen lock\" and enable to continue.",
@@ -278,7 +274,7 @@ public class AuthManager {
                     app.finish();
                 }
             }, 0);
-        }
+        }  */
 
     }
 

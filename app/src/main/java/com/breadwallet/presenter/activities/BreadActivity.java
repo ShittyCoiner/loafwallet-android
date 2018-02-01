@@ -169,6 +169,8 @@ public class BreadActivity extends BRActivity implements BRWalletManager.OnBalan
 
     }
 
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //leave it empty, avoiding the os bug
@@ -178,7 +180,7 @@ public class BreadActivity extends BRActivity implements BRWalletManager.OnBalan
         Uri data = intent.getData();
         if (data == null) return;
         String scheme = data.getScheme();
-        if (scheme != null && (scheme.startsWith("litecoin") || scheme.startsWith("bitid"))) {
+        if (scheme != null && (scheme.startsWith("shittycoin") || scheme.startsWith("bitid"))) {
             String str = intent.getDataString();
             BitcoinUrlHandler.processRequest(this, str);
         }
@@ -330,7 +332,7 @@ public class BreadActivity extends BRActivity implements BRWalletManager.OnBalan
         savedFragmentTag = null;
 
         TxManager.getInstance().onResume(BreadActivity.this);
-
+        updateUI();
     }
 
     private void setupNetworking() {
@@ -469,11 +471,11 @@ public class BreadActivity extends BRActivity implements BRWalletManager.OnBalan
 
                 //amount in BTC units
                 BigDecimal btcAmount = BRExchange.getBitcoinForSatoshis(BreadActivity.this, amount);
-                final String formattedBTCAmount = BRCurrency.getFormattedCurrencyString(BreadActivity.this, "LTC", btcAmount);
+                final String formattedBTCAmount = BRCurrency.getFormattedCurrencyString(BreadActivity.this, "SYC", btcAmount);
 
                 //amount in currency units
                 BigDecimal curAmount = BRExchange.getAmountFromSatoshis(BreadActivity.this, iso, amount);
-                final String formattedCurAmount = BRCurrency.getFormattedCurrencyString(BreadActivity.this, iso, curAmount);
+                final String formattedCurAmount = BRCurrency.getFormattedCurrencyString(BreadActivity.this, iso, btcAmount);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

@@ -213,6 +213,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.QRActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait">
+        </activity>
 
         <service
             android:name=".tools.listeners.SyncReceiver"

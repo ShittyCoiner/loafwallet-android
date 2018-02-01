@@ -346,7 +346,8 @@ public class PostAuth {
 
     public void onCanaryCheck(final Activity app, boolean authAsked) {
         String canary = null;
-        try {
+        BRWalletManager.getInstance().startTheWalletIfExists(app);
+     /*   try {
             canary = BRKeyStore.getCanary(app, BRConstants.CANARY_REQUEST_CODE);
         } catch (UserNotAuthenticatedException e) {
             return;
@@ -374,7 +375,7 @@ public class PostAuth {
                 }
             }
         }
-        BRWalletManager.getInstance().startTheWalletIfExists(app);
+        BRWalletManager.getInstance().startTheWalletIfExists(app); */
     }
 
 }

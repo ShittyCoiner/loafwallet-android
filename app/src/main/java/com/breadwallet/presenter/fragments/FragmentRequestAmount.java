@@ -5,8 +5,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,23 +22,18 @@ import com.breadwallet.R;
 import com.breadwallet.presenter.customviews.BRButton;
 import com.breadwallet.presenter.customviews.BRKeyboard;
 import com.breadwallet.presenter.customviews.BRLinearLayoutWithCaret;
-import com.breadwallet.tools.adapter.CurAdapter;
 import com.breadwallet.tools.animation.BRAnimator;
 import com.breadwallet.tools.animation.SlideDetector;
-import com.breadwallet.tools.listeners.RecyclerItemClickListener;
 import com.breadwallet.tools.manager.BRClipboardManager;
 import com.breadwallet.tools.manager.BRSharedPrefs;
 import com.breadwallet.tools.qrcode.QRUtils;
-import com.breadwallet.tools.sqlite.CurrencyDataSource;
-import com.breadwallet.tools.util.BRExchange;
 import com.breadwallet.tools.util.BRConstants;
 import com.breadwallet.tools.util.BRCurrency;
+import com.breadwallet.tools.util.BRExchange;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.BRWalletManager;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -136,7 +129,7 @@ public class FragmentRequestAmount extends Fragment {
         signalLayout.removeView(request);
 
         showCurrencyList(false);
-        selectedIso = BRSharedPrefs.getPreferredBTC(getContext()) ? "LTC" : BRSharedPrefs.getIso(getContext());
+        selectedIso = BRSharedPrefs.getPreferredBTC(getContext()) ? "SYC" : BRSharedPrefs.getIso(getContext());
 
         signalLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +243,7 @@ public class FragmentRequestAmount extends Fragment {
             @Override
             public void onClick(View v) {
                 if (selectedIso.equalsIgnoreCase(BRSharedPrefs.getIso(getContext()))) {
-                    selectedIso = "LTC";
+                    selectedIso = "SYC";
                 } else {
                     selectedIso = BRSharedPrefs.getIso(getContext());
                 }
@@ -306,7 +299,7 @@ public class FragmentRequestAmount extends Fragment {
                     @Override
                     public void run() {
                         mAddress.setText(receiveAddress);
-                        boolean generated = generateQrImage(receiveAddress, "0", "LTC");
+                        boolean generated = generateQrImage(receiveAddress, "0", "SYC");
                         if (!generated)
                             throw new RuntimeException("failed to generate qr image for address");
                     }
@@ -399,7 +392,7 @@ public class FragmentRequestAmount extends Fragment {
         String tmpAmount = amountBuilder.toString();
         amountEdit.setText(tmpAmount);
         isoText.setText(BRCurrency.getSymbolByIso(getActivity(), selectedIso));
-        isoButton.setText(String.format("%s(%s)", BRCurrency.getCurrencyName(getActivity(),selectedIso), BRCurrency.getSymbolByIso(getActivity(), selectedIso)));
+        isoButton.setText(String.format("%s", BRCurrency.getCurrencyName(getActivity(),selectedIso)));
 
     }
 
@@ -432,7 +425,7 @@ public class FragmentRequestAmount extends Fragment {
             String am = new BigDecimal(amount).divide(new BigDecimal(100000000), 8, BRConstants.ROUNDING_MODE).toPlainString();
             amountArg = "?amount=" + am;
         }
-        return BRWalletManager.getInstance().generateQR(getActivity(), "litecoin:" + address + amountArg, mQrImage);
+        return BRWalletManager.getInstance().generateQR(getActivity(), "shittycoin:" + address + amountArg, mQrImage);
     }
 
 
